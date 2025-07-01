@@ -17,7 +17,7 @@ spec:
 
   isCA: false
 
-  commonName: {{ .Values.certificates.commonNames.admin }}
+  commonName: admin
   subject:
     organizations:
       - {{ .Values.certificates.subject.organization }}
@@ -27,12 +27,15 @@ spec:
       - {{ .Values.certificates.subject.locality }}
 
   issuerRef:
+    {{- if .Values.certificates.dashboardIssuer.name }}
+    name: {{ .Values.certificates.dashboardIssuer.name }}
+    kind: {{ .Values.certificates.dashboardIssuer.type | default "ClusterIssuer" }}
+    {{- else }}
     name: {{ .Values.certificates.issuer.name | default (printf "%s-ca-issuer" (include "wazuh.fullname" .)) }}
     {{- if eq .Values.certificates.issuer.type "ClusterIssuer" }}
     kind: ClusterIssuer
     {{- end }}
-    # We can reference ClusterIssuers by changing the kind here.
-    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    {{- end }}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -52,7 +55,7 @@ spec:
 
   isCA: false
 
-  commonName: {{ .Values.certificates.commonNames.dashboard }}
+  commonName: {{ .Values.dashboard.ingress.host | quote }}
   subject:
     organizations:
       - {{ .Values.certificates.subject.organization }}
@@ -63,9 +66,14 @@ spec:
 
   # Issuer references are always required.
   issuerRef:
+    {{- if .Values.certificates.dashboardIssuer.name }}
+    name: {{ .Values.certificates.dashboardIssuer.name }}
+    kind: {{ .Values.certificates.dashboardIssuer.type | default "ClusterIssuer" }}
+    {{- else }}
     name: {{ .Values.certificates.issuer.name | default (printf "%s-ca-issuer" (include "wazuh.fullname" .)) }}
     {{- if eq .Values.certificates.issuer.type "ClusterIssuer" }}
     kind: ClusterIssuer
+    {{- end }}
     {{- end }}
 ---
 apiVersion: cert-manager.io/v1
@@ -86,7 +94,7 @@ spec:
 
   isCA: false
 
-  commonName: {{ .Values.certificates.commonNames.node }}
+  commonName: node
   subject:
     organizations:
       - {{ .Values.certificates.subject.organization }}
@@ -119,7 +127,7 @@ spec:
 
   isCA: false
 
-  commonName: {{ .Values.certificates.commonNames.filebeat }}
+  commonName: filebeat
   subject:
     organizations:
       - {{ .Values.certificates.subject.organization }}
