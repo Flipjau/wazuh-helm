@@ -27,15 +27,11 @@ spec:
       - {{ .Values.certificates.subject.locality }}
 
   issuerRef:
-    {{- if .Values.certificates.dashboardIssuer.name }}
-    name: {{ .Values.certificates.dashboardIssuer.name }}
-    kind: {{ .Values.certificates.dashboardIssuer.type | default "ClusterIssuer" }}
-    {{- else }}
     name: {{ .Values.certificates.issuer.name | default (printf "%s-ca-issuer" (include "wazuh.fullname" .)) }}
     {{- if eq .Values.certificates.issuer.type "ClusterIssuer" }}
     kind: ClusterIssuer
     {{- end }}
-    {{- end }}
+  
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -105,7 +101,10 @@ spec:
 
   # Issuer references are always required.
   issuerRef:
-    name: {{ include "wazuh.fullname" . }}-ca-issuer
+    name: {{ .Values.certificates.issuer.name | default (printf "%s-ca-issuer" (include "wazuh.fullname" .)) }}
+    {{- if eq .Values.certificates.issuer.type "ClusterIssuer" }}
+    kind: ClusterIssuer
+    {{- end }}
     # We can reference ClusterIssuers by changing the kind here.
     # The default value is Issuer (i.e. a locally namespaced Issuer)
 ---
