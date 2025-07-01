@@ -3,6 +3,25 @@ entries:
   wazuh:
   - apiVersion: v2
     appVersion: 4.12.0
+    created: "2025-07-01T18:35:16.700884243Z"
+    dependencies:
+    - condition: cert-manager.enabled
+      name: cert-manager
+      repository: https://charts.jetstack.io
+      version: 1.16.3
+    description: Wazuh is a free and open source security platform that unifies XDR
+      and SIEM protection for endpoints and cloud workloads.
+    digest: ebe3d9742484b822d98ba06e2eeffd42e4c632d09535f2b7cda9d26e43521e5f
+    home: https://wazuh.com/
+    name: wazuh
+    sources:
+    - https://github.com/morgoved/wazuh-helm
+    type: application
+    urls:
+    - https://github.com/Flipjau/wazuh-helm/releases/download/wazuh-0.1.4/wazuh-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 4.12.0
     created: "2025-05-29T01:05:26.914680339Z"
     dependencies:
     - condition: cert-manager.enabled
@@ -77,4 +96,4 @@ entries:
     urls:
     - https://github.com/Flipjau/wazuh-helm/releases/download/wazuh-0.1.0/wazuh-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-29T01:05:26.914699966Z"
+generated: "2025-07-01T18:35:16.700917345Z"
