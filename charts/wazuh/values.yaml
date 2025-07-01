@@ -31,6 +31,17 @@ certificates:
     ## ClusterIssuer.
     ##
     type: issuer
+  ## Parameters for the dashboard issuer.
+  ##
+  dashboardIssuer:
+    ## @param certificates.dashboardIssuer.name of the issuer used for signing the dashboard certificates. If this is null
+    ## a new selfsigned issuer will be created with the chart.
+    ##
+    name: null   # Exemplo: letsencrypt-prod
+    ## @param certificates.dashboardIssuer.type defines the type of the issuer, possible values are issuer and
+    ## ClusterIssuer.
+    ##
+    type: ClusterIssuer
   ## @param certificates.duration timeframe for validity of cert.
   ##
   duration: 2160h # 90d
