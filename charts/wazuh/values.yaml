@@ -33,7 +33,7 @@ certificates:
     type: issuer
   ## Parameters for the dashboard issuer.
   ##
-  dashboardIssuer:
+  dashboardIngressIssuer:
     ## @param certificates.dashboardIssuer.name of the issuer used for signing the dashboard certificates. If this is null
     ## a new selfsigned issuer will be created with the chart.
     ##
