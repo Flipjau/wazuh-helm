@@ -650,3 +650,11 @@ wazuh:
     ## @param wazuh.worker.extraConf Gets appended to the wazuh.worker.conf.
     ##
     extraConf: ""
+  ## @section wazuh configuration of the wazuh agents.
+  ##
+  ingress:
+    enabled: true
+    className: ""
+    tls: []
+    annotations: {}
+    host: "wazuh-agents.example.com"
