@@ -1,0 +1,13 @@
+{{- /* templates/ingress-tcp-agents.yaml */}}
+{{- if .Values.ingress.tcp.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "wazuh.fullname" . }}-tcp-services
+  labels:
+    {{- include "wazuh.labels" . | nindent 4 }}
+data:
+  {{- range $port, $service := .Values.ingress.tcp.ports }}
+  {{ $port }}: "{{ $.Release.Namespace }}/{{ tpl $service $ }}:{{ $port }}"
+  {{- end }}
+{{- end }}
