@@ -1,5 +1,5 @@
 {{- /* templates/ingress-tcp-agents.yaml */}}
-{{- if .Values.ingress.tcp.enabled }}
+{{- if .Values.wazuh.ingress.tcp.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
