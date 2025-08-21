@@ -7,7 +7,7 @@ metadata:
   labels:
     {{- include "wazuh.labels" . | nindent 4 }}
 data:
-  {{- range $port, $service := .Values.ingress.tcp.ports }}
+  {{- range $port, $service := .Values.wazuh.ingress.tcp.ports }}
   {{ $port }}: "{{ $.Release.Namespace }}/{{ tpl $service $ }}:{{ $port }}"
   {{- end }}
 {{- end }}
