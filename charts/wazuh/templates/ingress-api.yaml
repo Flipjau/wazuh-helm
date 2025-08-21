@@ -9,14 +9,20 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.wazuh.ingress.className }}
-  ingressClassName: {{ .Values.wazuh.ingress.className }}
+  {{- with .Values.wazuh.ingress.className }}
+  ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.wazuh.ingress.tls }}
+  {{- with .Values.wazuh.ingress.tls }}
   tls:
+    {{- range . }}
     - hosts:
-        - {{ .Values.wazuh.ingress.host | quote }}
-      secretName: {{ .Values.wazuh.ingress.tls.secretName }}
+        {{- range .hosts }}
+        - {{ tpl . $ | quote }}
+        {{- end }}
+      {{- with .secretName }}
+      secretName: {{ . }}
+      {{- end }}
+    {{- end }}
   {{- end }}
   rules:
     - host: {{ .Values.wazuh.ingress.host | quote }}
