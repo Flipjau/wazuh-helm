@@ -1,13 +1,14 @@
-{{- /* templates/ingress-api.yaml */}}
+{{- /* templates/ingress-services.yaml */}}
 {{- if .Values.wazuh.ingress.api.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "wazuh.fullname" . }}-api
-  {{- with .Values.wazuh.ingress.annotations }}
+  name: {{ include "wazuh.fullname" . }}-services
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "wazuh.fullname" . }}-services
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- toYaml .Values.wazuh.ingress.annotations | nindent 4 }}
 spec:
   {{- with .Values.wazuh.ingress.className }}
   ingressClassName: {{ . }}
@@ -32,7 +33,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "wazuh.fullname" . }}-master
+                name: {{ include "wazuh.fullname" . }}
                 port:
                   number: {{ .Values.wazuh.master.service.ports.api }}
 {{- end }}
