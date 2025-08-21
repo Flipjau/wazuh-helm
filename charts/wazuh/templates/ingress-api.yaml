@@ -6,22 +6,22 @@ metadata:
   name: {{ include "wazuh.fullname" . }}-api
   labels:
     {{- include "wazuh.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.wazuh.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.className }}
-  ingressClassName: {{ .Values.ingress.className }}
+  {{- if .Values.wazuh.ingress.className }}
+  ingressClassName: {{ .Values.wazuh.ingress.className }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.wazuh.ingress.tls }}
   tls:
     - hosts:
-        - {{ .Values.ingress.host | quote }}
-      secretName: {{ .Values.ingress.tls.secretName }}
+        - {{ .Values.wazuh.ingress.host | quote }}
+      secretName: {{ .Values.wazuh.ingress.tls.secretName }}
   {{- end }}
   rules:
-    - host: {{ .Values.ingress.host | quote }}
+    - host: {{ .Values.wazuh.ingress.host | quote }}
       http:
         paths:
           - path: /
