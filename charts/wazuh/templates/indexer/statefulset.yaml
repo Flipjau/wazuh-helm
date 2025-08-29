@@ -97,9 +97,12 @@ spec:
           secretName: ldap-cacert
       - name: indexer-conf-tmp
         emptyDir: {}
-      - configMap:
+      - name: indexer-conf
+        configMap:
           name: {{ include "wazuh.indexer.fullname" . }}-indexer-config
-        name: indexer-conf-cm
+      - name: indexer-conf-cm
+        configMap:
+          name: {{ include "wazuh.indexer.fullname" . }}-indexer-config
       containers:
         - name: wazuh-indexer
           imagePullPolicy: {{ .Values.indexer.images.pullPolicy }}
