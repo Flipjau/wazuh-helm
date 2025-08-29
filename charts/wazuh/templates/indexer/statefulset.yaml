@@ -23,7 +23,7 @@ spec:
         {{- if .Values.autoreload.enabled }}
         checksum/configmap: {{ include (print $.Template.BasePath "/indexer/configmap.yaml") . | sha256sum }}
         checksum/certificate: {{ include (print $.Template.BasePath "/certs/certificate.yaml") . | sha256sum }}
-        {{- end }}
+  {{- end }}
         {{- with .Values.indexer.annotations }}
             {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -36,8 +36,8 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if and .Values.indexer.sysctlImage.enabled }}
       initContainers:
+        {{- if and .Values.indexer.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: "{{ .Values.indexer.sysctlImage.images.repository }}:{{ .Values.indexer.sysctlImage.images.tag }}"
@@ -57,30 +57,28 @@ spec:
           {{- end }}
         {{- end }}
         # InitContainer para substituir placeholders do config.yml
-        initContainers:
-          - name: config-envsubst
-            image: busybox
-            command:
-              - sh
-              - -c
-              - |
-                cp /config/config.yml /config/config.yml.orig
-                sed "s|__LDAP_HOST__|$LDAP_HOST|g; s|__LDAP_PASSWORD__|$LDAP_PASSWORD|g" /config/config.yml.orig > /config/config.yml
-            env:
-              - name: LDAP_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: ldap-cred
-                    key: LDAP_HOST
-              - name: LDAP_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ldap-cred
-                    key: LDAP_PASSWORD
-            volumeMounts:
-              - name: indexer-conf
-                mountPath: /config
-      {{- end }}
+        - name: config-envsubst
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              cp /config/config.yml /config/config.yml.orig
+              sed "s|__LDAP_HOST__|$LDAP_HOST|g; s|__LDAP_PASSWORD__|$LDAP_PASSWORD|g" /config/config.yml.orig > /config/config.yml
+          env:
+            - name: LDAP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: ldap-cred
+                  key: LDAP_HOST
+            - name: LDAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ldap-cred
+                  key: LDAP_PASSWORD
+          volumeMounts:
+            - name: indexer-conf
+              mountPath: /config
       volumes:
       - name: admin-certs
         secret:
