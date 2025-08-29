@@ -79,6 +79,10 @@ spec:
           volumeMounts:
             - name: indexer-conf
               mountPath: /config
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
       volumes:
       - name: admin-certs
         secret:
