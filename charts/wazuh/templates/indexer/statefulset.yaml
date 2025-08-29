@@ -63,6 +63,9 @@ spec:
       - name: node-certs
         secret:
           secretName: node-tls
+      - name: ldap-cacert
+        secret:
+          secretName: ldap-cacert
       - configMap:
           name: {{ include "wazuh.indexer.fullname" . }}-indexer-config
         name: indexer-conf
@@ -92,6 +95,16 @@ spec:
                   fieldPath: metadata.namespace
             - name: DISABLE_INSTALL_DEMO_CONFIG
               value: {{ .Values.indexer.env.DISABLE_INSTALL_DEMO_CONFIG | quote }}
+              - name: LDAP_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: ldap-cred
+                    key: LDAP_HOST
+              - name: LDAP_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ldap-cred
+                    key: LDAP_PASSWORD
           {{- with .Values.indexer.additionalEnv }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -132,6 +145,11 @@ spec:
               name: admin-certs
               readOnly: true
               subPath: tls.key
+            # LDAP CA Cert
+            - mountPath: /usr/share/wazuh-indexer/opensearch-security/ldapcacert.pem
+              name: ldap-cacert
+              readOnly: true
+              subPath: ldapcacert.pem
             # Config
             - name: indexer-conf
               mountPath: /usr/share/wazuh-indexer/opensearch.yml
