@@ -652,9 +652,3 @@ wazuh:
     extraConf: ""
   ## @section wazuh configuration of the wazuh agents.
   ##
-  ingress:
-    enabled: true
-    className: ""
-    tls: []
-    annotations: {}
-    host: "wazuh-agents.example.com"
