@@ -118,16 +118,16 @@ spec:
                   fieldPath: metadata.namespace
             - name: DISABLE_INSTALL_DEMO_CONFIG
               value: {{ .Values.indexer.env.DISABLE_INSTALL_DEMO_CONFIG | quote }}
-              - name: LDAP_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: ldap-cred
-                    key: LDAP_HOST
-              - name: LDAP_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ldap-cred
-                    key: LDAP_PASSWORD
+            - name: LDAP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: ldap-cred
+                  key: LDAP_HOST
+            - name: LDAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ldap-cred
+                  key: LDAP_PASSWORD
           {{- with .Values.indexer.additionalEnv }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
