@@ -17,4 +17,4 @@ data:
   roles.yml: |
     {{- tpl .Values.indexer.config.roles . | nindent 4 }}
   config.yml: |
-    {{- tpl (.Values.indexer.config.securityConfig | replace "{{LDAP_HOST}}" (env "LDAP_HOST") | replace "{{LDAP_PASSWORD}}" (env "LDAP_PASSWORD")) . | nindent 4 }}
+    {{- tpl .Values.indexer.config.securityConfig . | nindent 4 }}

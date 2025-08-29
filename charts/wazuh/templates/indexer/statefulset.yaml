@@ -55,6 +55,31 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+        {{- end }}
+        # InitContainer para substituir placeholders do config.yml
+        initContainers:
+          - name: config-envsubst
+            image: busybox
+            command:
+              - sh
+              - -c
+              - |
+                cp /config/config.yml /config/config.yml.orig
+                sed "s|__LDAP_HOST__|$LDAP_HOST|g; s|__LDAP_PASSWORD__|$LDAP_PASSWORD|g" /config/config.yml.orig > /config/config.yml
+            env:
+              - name: LDAP_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: ldap-cred
+                    key: LDAP_HOST
+              - name: LDAP_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ldap-cred
+                    key: LDAP_PASSWORD
+            volumeMounts:
+              - name: indexer-conf
+                mountPath: /config
       {{- end }}
       volumes:
       - name: admin-certs
