@@ -1,6 +1,6 @@
 # wazuh
 
-![Version: 0.1.23](https://img.shields.io/badge/Version-0.1.23-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.12.0](https://img.shields.io/badge/AppVersion-4.12.0-informational?style=flat-square)
+![Version: 0.1.24](https://img.shields.io/badge/Version-0.1.24-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.12.0](https://img.shields.io/badge/AppVersion-4.12.0-informational?style=flat-square)
 
 ## Introduction
 
@@ -22,7 +22,7 @@ Wazuh is a free and open source security platform that unifies XDR and SIEM prot
 
 ## Prerequisites
 
-- Kubernetes 1.23+
+- Kubernetes 1.24+
 - Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
