@@ -55,7 +55,7 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-        {{- end }}
+      {{- end }}
         # InitContainer para substituir placeholders do config.yml
         - name: config-envsubst
           image: busybox
