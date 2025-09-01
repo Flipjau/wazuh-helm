@@ -56,35 +56,6 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       {{- end }}
-        # InitContainer para substituir placeholders do config.yml
-        - name: config-envsubst
-          image: busybox
-          command:
-            - sh
-            - -c
-            - |
-              cp /config-src/config.yml /config/config.yml.orig
-              sed "s|__LDAP_HOST__|$LDAP_HOST|g; s|__LDAP_PASSWORD__|$LDAP_PASSWORD|g" /config/config.yml.orig > /config/config.yml
-          env:
-            - name: LDAP_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: ldap-cred
-                  key: LDAP_HOST
-            - name: LDAP_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ldap-cred
-                  key: LDAP_PASSWORD
-          volumeMounts:
-            - name: indexer-conf-cm
-              mountPath: /config-src
-            - name: indexer-conf-tmp
-              mountPath: /config
-          resources:
-            limits:
-              cpu: 100m
-              memory: 128Mi
       volumes:
       - name: admin-certs
         secret:
@@ -95,12 +66,7 @@ spec:
       - name: ldap-cacert
         secret:
           secretName: ldap-cacert
-      - name: indexer-conf-tmp
-        emptyDir: {}
       - name: indexer-conf
-        configMap:
-          name: {{ include "wazuh.indexer.fullname" . }}-indexer-config
-      - name: indexer-conf-cm
         configMap:
           name: {{ include "wazuh.indexer.fullname" . }}-indexer-config
       containers:
@@ -129,16 +95,6 @@ spec:
                   fieldPath: metadata.namespace
             - name: DISABLE_INSTALL_DEMO_CONFIG
               value: {{ .Values.indexer.env.DISABLE_INSTALL_DEMO_CONFIG | quote }}
-            - name: LDAP_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: ldap-cred
-                  key: LDAP_HOST
-            - name: LDAP_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ldap-cred
-                  key: LDAP_PASSWORD
           {{- with .Values.indexer.additionalEnv }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -201,14 +157,6 @@ spec:
               mountPath: /usr/share/wazuh-indexer/opensearch-security/roles_mapping.yml
               subPath: roles_mapping.yml
               readOnly: true
-            - name: indexer-conf-tmp
-              mountPath: /usr/share/wazuh-indexer/opensearch-security/config.yml
-              subPath: config.yml
-              readOnly: true
-            - name: indexer-conf-cm
-              mountPath: /config-src
-            - name: indexer-conf-tmp
-              mountPath: /config
           ports:
             - containerPort: {{ .Values.indexer.service.httpPort }}
               name: indexer-rest
